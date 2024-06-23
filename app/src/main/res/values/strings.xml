@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">QuikScore</string>
+
+    <string name="permission_required">Permission required</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="message_permission_to_draw_on_top_others_apps">…to show floating windows the app needs permissions to draw on top of other apps</string>
+
+    <string name="error_network_unavailable">You are not connected to internet, Please try again.</string>
+    <string name="error_service_unavailable">Currently Service is not available, Please try again later.</string>
+    <string name="error_resource_not_found">Required information is not available at the moment, Please try again later.</string>
+    <string name="error_server">There is some unknown error happened, if it happens again then please report, Please try again.</string>
+    <string name="error_general">There was some issue loading information, Please try again.</string>
+    <string name="live">Live</string>
+    <string name="no_match_data">No match data</string>
+    <string name="pin_score">Pin Score</string>
+    <string name="demo_games">Demo Games</string>
+    <string name="refresh">Refresh</string>
+    <string name="match_details">Match Details</string>
+    <string name="cancel">Cancel</string>
+</resources>
