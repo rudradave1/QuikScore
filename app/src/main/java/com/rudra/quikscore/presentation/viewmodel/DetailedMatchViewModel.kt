@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rudra.quikscore.R
 import com.rudra.quikscore.model.MatchesItem
+import com.rudra.quikscore.overlay.OverlayController
 import com.rudra.quikscore.usecase.GetMatchByIdUseCase
 import com.rudra.quikscore.util.ErrorText
 import com.rudra.quikscore.util.ErrorType
@@ -26,7 +27,8 @@ import kotlin.random.Random
 @HiltViewModel
 class DetailedMatchViewModel @Inject constructor(
     private val getMatchByIdUseCase: GetMatchByIdUseCase,
-    private val errorTypeToErrorTextConverter: ErrorTypeToErrorTextConverter
+    private val errorTypeToErrorTextConverter: ErrorTypeToErrorTextConverter,
+    private val overlayController: OverlayController
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<MatchesItem>>(UiState.Loading())
@@ -59,6 +61,20 @@ class DetailedMatchViewModel @Inject constructor(
         val list = List(random) { generateRandomMatch() }
         _uiState.value = UiState.Loaded(list.first())
         startGoalSimulation()
+    }
+
+    fun canDrawOverlay(): Boolean = overlayController.canDrawOverlays()
+
+    fun startOverlay(match: MatchesItem?): Boolean {
+        return overlayController.startOverlay(match)
+    }
+
+    fun requestOverlayPermission() {
+        overlayController.requestOverlayPermission()
+    }
+
+    fun stopOverlay() {
+        overlayController.stopOverlay()
     }
 
     private fun startGoalSimulation() {

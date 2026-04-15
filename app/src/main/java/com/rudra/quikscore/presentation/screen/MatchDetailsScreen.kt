@@ -38,13 +38,11 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.rudra.quikscore.R
-import com.rudra.quikscore.floatingwindow.ComposeFloatingWindow
 import com.rudra.quikscore.floatingwindow.DialogPermission
 import com.rudra.quikscore.model.Goalscorer
 import com.rudra.quikscore.model.Lineup
 import com.rudra.quikscore.model.MatchesItem
 import com.rudra.quikscore.model.Statistic
-import com.rudra.quikscore.presentation.component.LiveScoreBubble
 import com.rudra.quikscore.presentation.component.MyTopAppBar
 import com.rudra.quikscore.presentation.component.PinScoreButton
 import com.rudra.quikscore.presentation.viewmodel.DetailedMatchViewModel
@@ -92,24 +90,7 @@ fun MatchDetailsScreen(
             is UiState.Loaded -> {
                 val match = (uiState as? UiState.Loaded<MatchesItem>)?.data
                 match?.let { loadedMatch ->
-                    val floatingWindow =
-                        ComposeFloatingWindow(context = LocalContext.current.applicationContext)
-
-                    floatingWindow.setContent {
-                        LiveScoreBubble(
-                            match = match,
-                            onCloseClick = {
-                                floatingWindow.hide()
-                            },
-                            onClick = {
-                                Log.d(
-                                    "QuickScore",
-                                    "window Clicked: $loadedMatch"
-                                )
-                            }
-                        )
-                    }
-                    MatchDetailsContent(it, loadedMatch, showDialogPermission, floatingWindow)
+                    MatchDetailsContent(it, loadedMatch, showDialogPermission, viewModel)
                 }
 
             }
@@ -133,7 +114,7 @@ fun MatchDetailsContent(
     padding: PaddingValues,
     loadedMatch: MatchesItem,
     showDialogPermission: MutableState<Boolean>,
-    floatingWindow: ComposeFloatingWindow,
+    viewModel: DetailedMatchViewModel,
 ) {
 
     DialogPermission(showDialogState = showDialogPermission)
@@ -150,9 +131,9 @@ fun MatchDetailsContent(
         item {
             // Pin Score Button
             PinScoreButton {
-                if (floatingWindow.isAvailable()) {
-                    if (floatingWindow.decorView.childCount != 0) {
-                        floatingWindow.show()
+                if (viewModel.canDrawOverlay()) {
+                    if (!viewModel.startOverlay(loadedMatch)) {
+                        showDialogPermission.value = true
                     }
                 } else {
                     // Handle dialog or toast for permission issue
